@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -7,24 +5,6 @@
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "SimpleEventSubsystem.generated.h"
 
-/**
- * This subsystem can be used to send and listen for events with an arbitrary struct as a payload.
- * Can be called from anywhere the GameInstance is accessible. Not replicated.
- *
- * **Example Usage:**
- * @code
- * // Sending a global event
- * UGameInstance* GameInstance = ...;
- * FGameplayTag EventTag = FGameplayTag::RequestGameplayTag(TEXT("Your.Event.Tag.Here"));
- * FGameplayTag DomainTag = FGameplayTag::RequestGameplayTag(TEXT("Your.Domain.Tag.Here"));
- *
- * USimpleEventSubsystem* SimpleEventSubsystem = GameInstance->GetSubsystem<USimpleEventSubsystem>();
- *
- * FVector TestStruct; // This can be any struct
- * FInstancedStruct InstancedStruct = FInstancedStruct::Make(TestStruct);
- * SimpleEventSubsystem->SendGlobalEvent(EventTag, DomainTag, InstancedStruct);
- * @endcode
- */
 UCLASS()
 class SIMPLEEVENTPLUGIN_API USimpleEventSubsystem : public UGameInstanceSubsystem
 {
