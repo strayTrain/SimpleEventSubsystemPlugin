@@ -1,7 +1,7 @@
 # Simple Event Plugin
 
 **Simple Event Plugin** is a lightweight Unreal Engine plugin that provides a subsystem to send and listen for events.
-- Events are indentified by `EventTags` and categorized by `DomainTags`.
+- Events are indentified by `EventTags` and categorized by `DomainTags` which are both simple [gameplay tags](https://www.tomlooman.com/unreal-engine-gameplaytags-data-driven-design/)
 - Events come with a payload that can be any UStruct you create in C++ or Blueprints (via [InstancedStruct](https://www.reddit.com/r/unrealengine/comments/1f7o1co/what_is_the_difference_between_a_struct_and_an/)).
 - Anything that has access to the GameInstance (e.g Widgets, Pawns, PlayerControllers) can listen for/send events.
 
