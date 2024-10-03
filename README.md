@@ -64,7 +64,7 @@ Anything that has access to the GameInstance (e.g Widgets, Pawns, PlayerControll
   </br>
 
   The `SendEvent` function is not replicated i.e calling `SendEvent` on the client won't trigger a listener on the server and vice versa.
-  `InstancedStruct` can be replicated though, so you can use it as an argument for an RPC. e.g The server calls a multicast event which calls send event on all connected clients
+  `InstancedStruct`, which is the type of the generic payload struct wrapper in the event, **can** be replicated though! So you can pass the payload though an RPC and the underlying wrapped struct will also replicate. e.g The server calls a multicast event which calls `SendEvent` on all connected clients
 
   </br>
   
