@@ -74,7 +74,7 @@ Anything that has access to the GameInstance (e.g Widgets, Pawns, PlayerControll
 ## Requirements
 
 - Unreal Engine 5.2* or higher.   
-*instanced structs were introduced in 5.0 with the StructUtils plugin and got [replication support around 5.2](https://github.com/EpicGames/UnrealEngine/pull/9280). Thus, this plugin may work with UE < 5.2 but expect possible issues.
+*instanced structs were introduced in 5.0 with the StructUtils plugin and got [replication support around 5.2](https://github.com/EpicGames/UnrealEngine/pull/9280). Thus, this plugin may work with UE < 5.2 but expect issues with replication.
 
 ## Installation Steps
 
