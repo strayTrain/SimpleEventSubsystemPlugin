@@ -25,8 +25,8 @@ public:
 	 * Register a listener to receive events. The listener will be notified when an event is sent that matches the provided filters.
 	 *
 	 * @param Listener The object listening for the event (mandatory).
-	 * @param EventFilter Only listen for this event (mandatory).
-	 * @param DomainFilter Only listen for events in this domain (optional). If not set, the listener will receive events from all domains.
+	 * @param EventFilter Only listen for events with tags matching this filter (mandatory).
+	 * @param DomainFilter Only listen for events with domains matching this filter (optional). If not set, the listener will receive events from all domains.
 	 * @param EventReceivedDelegate The FGlobalEventDelegate that gets called when the event is received and passes the filters (mandatory).
 	 */
 	UFUNCTION(BlueprintCallable, Category = "SimpleEventSubsystem")
