@@ -43,7 +43,7 @@ void USimpleEventSubsystem::SendEvent(FGameplayTag EventTag, FGameplayTag Domain
 	}
 }
 
-void USimpleEventSubsystem::ListenForEvent(UObject* Listener, FGameplayTagContainer EventTags, FGameplayTagContainer DomainTags, FSimpleEventDelegate EventReceivedDelegate)
+void USimpleEventSubsystem::ListenForEvent(UObject* Listener, FGameplayTagContainer EventFilter, FGameplayTagContainer DomainFilter, FSimpleEventDelegate EventReceivedDelegate)
 {
 	if (!Listener)
 	{
@@ -54,8 +54,8 @@ void USimpleEventSubsystem::ListenForEvent(UObject* Listener, FGameplayTagContai
 	FEventSubscription Subscription;
 	Subscription.ListenerObject = Listener;
 	Subscription.CallbackDelegate = EventReceivedDelegate;
-	Subscription.EventTags.AppendTags(EventTags);
-	Subscription.DomainTags.AppendTags(DomainTags);
+	Subscription.EventTags.AppendTags(EventFilter);
+	Subscription.DomainTags.AppendTags(DomainFilter);
 
 	Subscriptions.Add(Subscription);
 }
