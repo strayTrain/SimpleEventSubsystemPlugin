@@ -1,24 +1,18 @@
 # Simple Event Plugin
 
-**Simple Event Plugin** is a lightweight Unreal Engine plugin that provides an event dispatching and subscription system. \
-Events are categorized by `EventTags` and optionally by `DomainTags`, with an optional payload that can be any UStruct you create in C++ or Blueprints (via [InstancedStruct](https://www.reddit.com/r/unrealengine/comments/1f7o1co/what_is_the_difference_between_a_struct_and_an/)). \
-Anything that has access to the GameInstance (e.g Widgets, Pawns, PlayerControllers) can subscribe an event through a subsystem.
+**Simple Event Plugin** is a lightweight Unreal Engine plugin that provides a subsystem that can be used to send and listen for events.
+- Events are indentified by `EventTags` and categorized by `DomainTags`.
+- Events come with a payload that can be any UStruct you create in C++ or Blueprints (via [InstancedStruct](https://www.reddit.com/r/unrealengine/comments/1f7o1co/what_is_the_difference_between_a_struct_and_an/)).
+- Anything that has access to the GameInstance (e.g Widgets, Pawns, PlayerControllers) can listen for events.
+- Sending events is not replicated but you can get around this using RPC's.
 
-![image](https://github.com/user-attachments/assets/45a95682-186d-4c5e-8ffd-388fe1613517)
-
-## Use cases
-
-This plugin allows you to:
-- Send events using gameplay tags.
-- Subscribe listeners to specific events using gameplay tags.
-- Remove listeners from event subscriptions.
+Here's a visual summary of the available functions:
+![image](https://github.com/user-attachments/assets/39f22978-ce5c-4ad7-9dc5-b270a279b7c9)
 
 ## Requirements
 
-- Unreal Engine 5.2* or higher. 
-- **GameplayTags** and **StructUtils** modules enabled in your project.
-  
-*(instanced structs were introduced in 5.0 with the StructUtils plugin and got [replication support in 5.2](https://github.com/EpicGames/UnrealEngine/pull/9280) I believe. Thus, this plugin will technically work with < 5.2 but expect things might not work)
+- Unreal Engine 5.2* or higher.   
+*instanced structs were introduced in 5.0 with the StructUtils plugin and got [replication support around 5.2](https://github.com/EpicGames/UnrealEngine/pull/9280). Thus, this plugin will technically work with < 5.2 but expect things might not work
 
 ## Installation Steps
 
@@ -26,47 +20,6 @@ This plugin allows you to:
 2. Enable the plugin in your Unreal Engine project by navigating to **Edit > Plugins** and searching for "SimpleEventPlugin".
 3. Rebuild your project.
 
-### Event Flow Overview
-
-1. Use `SendEvent` to dispatch an event with an `EventTag`, optional `DomainTag`, and optional `Payload`.
-2. Use `ListenForEvent` to register a listener that reacts when an event matching its `EventTag` and `DomainTag` is sent.
-3. Use `StopListeningForEventDelegate` or `StopListeningForEventsFiltered` to unsubscribe listeners.
-
----
-
-## Usage
-
-### Blueprint Examples
-
-#### Sending Events
-
-In Blueprints, you can easily call the `SendEvent` function on the `SimpleEventSubsystem`.
-
-1. Obtain the `SimpleEventSubsystem` reference by calling `Get Game Instance Subsystem`.
-2. Use `Send Event` node.
-3. Provide the required `EventTag`, optional `DomainTag`, and optional `Payload`.
-
-![image](https://github.com/user-attachments/assets/33aad8a0-5990-432a-8d0f-02ebd6ce7e38)
-
-#### Listening for Events
-
-To listen for events in Blueprints:
-
-1. Obtain the `SimpleEventSubsystem` reference by calling `Get Game Instance Subsystem`.
-2. Use `Listen For Event` node.
-3. Bind your custom event to the `EventReceivedDelegate` parameter.
-4. Optionally, filter the event using `EventTag` and `DomainTag`.
-
-![Blueprint - Listening for Events](./images/listen_event.png)
-
-#### Unsubscribing from Events
-
-To unsubscribe from events:
-
-1. Obtain the `SimpleEventSubsystem` reference by calling `Get Game Instance Subsystem`.
-2. Use either `Stop Listening For Event Delegate` or `Stop Listening For Events Filtered` nodes.
-
-![Blueprint - Unsubscribing from Events](./images/unsubscribe_event.png)
 
 ---
 
@@ -87,9 +40,7 @@ void YourFunctionToSendEvent(UWorld* World)
     {
         FGameplayTag EventTag = FGameplayTag::RequestGameplayTag(TEXT("Game.PlayerDied"));
         FGameplayTag DomainTag = FGameplayTag::RequestGameplayTag(TEXT("Domains.Game"));
-        
-        // You can also add any custom data you want to send as a payload
-        FInstancedStruct Payload;  // Optional payload (can be empty)
+        FInstancedStruct Payload = FInstancedStruct::Make(FVector::UpVector);
 
         EventSubsystem->SendEvent(EventTag, DomainTag, Payload);
     }
@@ -119,8 +70,13 @@ void YourFunctionToListenForEvent(UObject* Listener, UWorld* World)
 }
 
 void YourClass::YourCallbackFunction(FGameplayTag EventTag, FGameplayTag Domain, FInstancedStruct Payload)
-{
-    // Handle the event
+{    
+    // Test if an instanced struct is a vector
+    if (const FVector* TestVector = Payload.GetPtr<FVector>())
+    {
+       // Do something with the payload vector
+    }
+
     UE_LOG(LogTemp, Log, TEXT("Event received: %s in domain: %s"), *EventTag.ToString(), *Domain.ToString());
 }
 ```
