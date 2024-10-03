@@ -40,7 +40,7 @@
   <summary>A note on replication </summary>
 
   The `SendEvent` function is not replicated i.e calling `SendEvent` on the client won't trigger a listener on the server and vice versa.
-  `InstancedStruct` can be replicated though so can use it as an argument for an RPC. E.g The server calls a multicast event which calls send event on all connected clients
+  `InstancedStruct` can be replicated though so you can use it as an argument for an RPC. E.g The server calls a multicast event which calls send event on all connected clients
   
   ![image](https://github.com/user-attachments/assets/1d04328e-a038-4ea2-8035-c4115eda914e)
 </details>
