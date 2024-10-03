@@ -6,8 +6,36 @@
 - Anything that has access to the GameInstance (e.g Widgets, Pawns, PlayerControllers) can listen for events.
 - Sending events is not replicated but you can get around this using RPC's.
 
-Here's a visual summary of the available functions:
-![image](https://github.com/user-attachments/assets/39f22978-ce5c-4ad7-9dc5-b270a279b7c9)
+Here's a summary of the available functions:
+<details>
+  <summary>Sending an event</summary>
+    
+  ![image](https://github.com/user-attachments/assets/064b7841-382d-4766-b058-0f3cc6c28abd)
+</details>
+
+<details>
+  <summary>Listening for an event</summary>
+    
+  ![image](https://github.com/user-attachments/assets/956ba3e7-a2d3-4328-b6c1-faa8b8356d39)
+</details>
+
+<details>
+  <summary>Receiving an event</summary>
+    
+  ![image](https://github.com/user-attachments/assets/d7c2fdd3-dd43-4d4c-aef1-417ded08cbc7)
+</details>
+
+<details>
+  <summary>Stop listening for an event</summary>
+    
+  ![image](https://github.com/user-attachments/assets/055bb44b-28bc-4c42-a832-b8c6af02dbfd)
+</details>
+
+<details>
+  <summary>A note on replication </summary>
+    
+  ![image](https://github.com/user-attachments/assets/1bce23c9-a01b-4b41-bb2f-71791f0c1c8d)
+</details>
 
 ## Requirements
 
