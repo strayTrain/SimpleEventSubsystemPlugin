@@ -46,8 +46,8 @@
 ## Installation Steps
 
 1. Download or clone the plugin into your Unreal Engine project, under the [Plugins folder](https://dev.epicgames.com/documentation/en-us/unreal-engine/plugins-in-unreal-engine#pluginfolders) (create it if it doesn't exist.)
-2. Enable the plugin in your Unreal Engine project by navigating to **Edit > Plugins** and searching for "SimpleEventPlugin".
-3. Rebuild your project.
+2. Rebuild your project.
+3. Enable the plugin in your Unreal Engine project by navigating to **Edit > Plugins** and searching for "SimpleEventPlugin". (it should be enabled by default)
 
 
 ---
