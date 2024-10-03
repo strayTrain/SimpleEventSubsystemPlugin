@@ -64,8 +64,6 @@
 
 #### Sending Events
 
-To send an event from any part of your game:
-
 ```cpp
 #include "SimpleEventSubsystem.h"
 #include "GameplayTagContainer.h"
@@ -85,8 +83,6 @@ void YourFunctionToSendEvent(UWorld* World)
 ```
 
 #### Listening for Events
-
-To subscribe to an event in C++:
 
 ```cpp
 #include "SimpleEventSubsystem.h"
@@ -119,8 +115,6 @@ void YourClass::YourCallbackFunction(FGameplayTag EventTag, FGameplayTag Domain,
 ```
 
 #### Unsubscribing from Events
-
-To stop listening to specific events:
 
 ```cpp
 #include "SimpleEventSubsystem.h"
