@@ -6,7 +6,8 @@
 - Anything that has access to the GameInstance (e.g Widgets, Pawns, PlayerControllers) can listen/send events.
 - Sending events is not replicated but you can get around this using RPC's.
 
-Here's a summary of the available functions:
+## API Summary
+
 <details>
   <summary>Sending an event</summary>
     
