@@ -1,16 +1,25 @@
 # Simple Event Plugin
 
-**Simple Event Plugin** is a lightweight Unreal Engine plugin that provides a subsystem to send and listen for events.
-- Events are identified by `Event` and categorized by `Domain` [gameplay tags](https://www.tomlooman.com/unreal-engine-gameplaytags-data-driven-design/).
-- Events come with a payload that can be any UStruct you create in C++ or Blueprints (via [InstancedStruct](https://github.com/mattyman174/GenericItemization?tab=readme-ov-file#intro)).
-- Anything that has access to the GameInstance (e.g Widgets, Pawns, PlayerControllers) can listen for/send events.
+**Simple Event Plugin** is a lightweight Unreal Engine plugin that provides a subsystem to send and listen for events. </br>
+Events can come with a payload that can be any UStruct you create in C++ or Blueprints (via [InstancedStruct](https://github.com/mattyman174/GenericItemization?tab=readme-ov-file#intro)). </br>
+Anything that has access to the GameInstance (e.g Widgets, Pawns, PlayerControllers) can listen for/send events.
 
 ## API Summary
 
 <details>
   <summary>Sending an event</summary>
 
-  You can use any struct as a payload with the `MakeInstancedStruct` node.
+  </br>
+  
+  Events are identified using 2 [gameplay tags](https://www.tomlooman.com/unreal-engine-gameplaytags-data-driven-design/): </br>
+  - `EventTag` e.g `Events.UI.ButtonClicked`
+  - `DomainTag` e.g `EventDomains.UI.PauseMenu`
+  
+  </br>
+  
+  You can use any struct as a payload to provide extra context to the event with the `MakeInstancedStruct` node.
+
+  </br>
     
   ![image](https://github.com/user-attachments/assets/10307cca-f18b-47cc-9b99-f55f111e488a)
 </details>
@@ -18,8 +27,12 @@
 <details>
   <summary>Listening for an event</summary>
 
-  You can listen for multiple events and domains at the same time. \
+  </br>
+
+  You can listen for multiple events and domains at the same time. </br>
   If you leave EventFilter or DomainFilter empty then the delegate will be triggered for all events/domains.
+
+  </br>
   
   ![image](https://github.com/user-attachments/assets/a1e6ddf3-4448-45e1-b215-14bf9a1be7f5)
 </details>
@@ -27,12 +40,20 @@
 <details>
   <summary>Receiving an event</summary>
 
-  Use the `GetInstancedStructValue` node to cast to the type you expect (the output is initially a wildcard and you break your expected struct to set the output type)   
+  </br>
+
+  Use the `GetInstancedStructValue` node to cast to the type you expect. </br>
+  The output is initially a wildcard and you break your expected struct to cast the output type. 
+
+  </br>
+  
   ![image](https://github.com/user-attachments/assets/82c3bbdb-f08a-4939-9d06-6fcffed21657)
 </details>
 
 <details>
   <summary>Stop listening for an event</summary>
+
+  </br>
     
   ![image](https://github.com/user-attachments/assets/34f561ef-443b-4b6a-8899-bcd2f422903f)
 </details>
@@ -40,8 +61,12 @@
 <details>
   <summary>A note on replication </summary>
 
+  </br>
+
   The `SendEvent` function is not replicated i.e calling `SendEvent` on the client won't trigger a listener on the server and vice versa.
-  `InstancedStruct` can be replicated though, so you can use it as an argument for an RPC. E.g The server calls a multicast event which calls send event on all connected clients
+  `InstancedStruct` can be replicated though, so you can use it as an argument for an RPC. e.g The server calls a multicast event which calls send event on all connected clients
+
+  </br>
   
   ![image](https://github.com/user-attachments/assets/1d04328e-a038-4ea2-8035-c4115eda914e)
 </details>
@@ -49,7 +74,7 @@
 ## Requirements
 
 - Unreal Engine 5.2* or higher.   
-*instanced structs were introduced in 5.0 with the StructUtils plugin and got [replication support around 5.2](https://github.com/EpicGames/UnrealEngine/pull/9280). Thus, this plugin will technically work with < 5.2 but expect things might not work
+*instanced structs were introduced in 5.0 with the StructUtils plugin and got [replication support around 5.2](https://github.com/EpicGames/UnrealEngine/pull/9280). Thus, this plugin may work with UE < 5.2 but expect possible issues.
 
 ## Installation Steps
 
