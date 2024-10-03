@@ -10,32 +10,40 @@
 
 <details>
   <summary>Sending an event</summary>
+
+  You can use any struct as a payload with the `MakeInstancedStruct` node.
     
-  ![image](https://github.com/user-attachments/assets/064b7841-382d-4766-b058-0f3cc6c28abd)
+  ![image](https://github.com/user-attachments/assets/10307cca-f18b-47cc-9b99-f55f111e488a)
 </details>
 
 <details>
   <summary>Listening for an event</summary>
-    
-  ![image](https://github.com/user-attachments/assets/956ba3e7-a2d3-4328-b6c1-faa8b8356d39)
+
+  You can listen for multiple events and domains at the same time. 
+  
+  ![image](https://github.com/user-attachments/assets/a1e6ddf3-4448-45e1-b215-14bf9a1be7f5)
 </details>
 
 <details>
   <summary>Receiving an event</summary>
-    
-  ![image](https://github.com/user-attachments/assets/d7c2fdd3-dd43-4d4c-aef1-417ded08cbc7)
+
+  Use the `GetInstancedStructValue` node to cast to the type you expect (the output is initially a wildcard and you break your expected struct to set the output type)   
+  ![image](https://github.com/user-attachments/assets/82c3bbdb-f08a-4939-9d06-6fcffed21657)
 </details>
 
 <details>
   <summary>Stop listening for an event</summary>
     
-  ![image](https://github.com/user-attachments/assets/055bb44b-28bc-4c42-a832-b8c6af02dbfd)
+  ![image](https://github.com/user-attachments/assets/34f561ef-443b-4b6a-8899-bcd2f422903f)
 </details>
 
 <details>
   <summary>A note on replication </summary>
-    
-  ![image](https://github.com/user-attachments/assets/1bce23c9-a01b-4b41-bb2f-71791f0c1c8d)
+
+  The `SendEvent` function is not replicated i.e calling `SendEven`t on the client won't trigger a listener on the server and vice versa.
+  `InstancedStruct` can be replicated though so can use it as an argument for an RPC. E.g The server calls a multicast event which calls send event on all connected clients
+  
+  ![image](https://github.com/user-attachments/assets/1d04328e-a038-4ea2-8035-c4115eda914e)
 </details>
 
 ## Requirements
@@ -145,8 +153,3 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 ## Contributions
 
 Feel free to submit a pull request or file an issue on GitHub. Contributions are always welcome!
-
----
-
-Let me know if you need additional features or help!
-
