@@ -78,7 +78,7 @@ Anything that has access to the GameInstance (e.g Widgets, Pawns, PlayerControll
 
 ## Installation Steps
 
-1. Download or clone the SimpleEventPlugin folder into your Unreal Engine project under the [Plugins folder](https://dev.epicgames.com/documentation/en-us/unreal-engine/plugins-in-unreal-engine#pluginfolders) (create it if it doesn't exist.)
+1. Download or clone the SimpleEventPlugin folder into your Unreal Engine project under your project's [Plugins folder](https://dev.epicgames.com/documentation/en-us/unreal-engine/plugins-in-unreal-engine#pluginfolders), create it if it doesn't exist. (example: If your project folder is `C:\Projects\SimpleEventTest` then place in  `C:\Projects\SimpleEventTest\Plugins`, the same place you would find `C:\Projects\SimpleEventTest\Source`)
 2. Rebuild your project.
 3. Enable the plugin in your Unreal Engine project by navigating to **Edit > Plugins** and searching for "SimpleEventPlugin". (it should be enabled by default)
 
