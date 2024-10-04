@@ -19,12 +19,12 @@ void USimpleEventSubsystem::SendEvent(FGameplayTag EventTag, FGameplayTag Domain
 			continue;
 		}
 
-		if (Subscription.EventTags.IsValid() && !Subscription.EventTags.HasTag(EventTag))
+		if (Subscription.EventTags.IsValid() && !Subscription.EventTags.HasTagExact(EventTag))
 		{
 			continue;
 		}
 
-		if (Subscription.DomainTags.IsValid() && !Subscription.DomainTags.HasTag(DomainTag))
+		if (Subscription.DomainTags.IsValid() && !Subscription.DomainTags.HasTagExact(DomainTag))
 		{
 			continue;
 		}
