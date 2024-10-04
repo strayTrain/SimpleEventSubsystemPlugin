@@ -14,8 +14,8 @@ public:
 	/**
 	 * Sends an event to all listeners. The event is not replicated.
 	 *
-	 * @param EventTag The gameplay tag identifying the event (mandatory).
-	 * @param DomainTag The domain tag categorizing the event (optional).
+	 * @param EventTag The gameplay tag identifying the event. (mandatory)
+	 * @param DomainTag The domain tag categorizing the event. (optional)
 	 * @param Payload The payload of the event as an instanced struct (optional).
 	 */
 	UFUNCTION(BlueprintCallable, Category = "SimpleEventSubsystem")
@@ -25,12 +25,22 @@ public:
 	 * Register a listener to receive events. The listener will be notified when an event is sent that matches the provided filters.
 	 *
 	 * @param Listener The object listening for the event (mandatory).
-	 * @param EventFilter Only listen for events with tags matching this filter (mandatory).
-	 * @param DomainFilter Only listen for events with domains matching this filter (optional). If not set, the listener will receive events from all domains.
+	 * @param EventFilter Only listen for events with tags matching this filter. If not set, the listener will accept all events.
+	 * @param DomainFilter Only listen for events with domains matching this filter. If not set, the listener will accept events from all domains.
 	 * @param EventReceivedDelegate The FGlobalEventDelegate that gets called when the event is received and passes the filters (mandatory).
+  	 * @param RequiredPayloadType Only respond to the event if there is a payload present and it is of this type. If not set, the listener will accept events with any (or no) payload.
+	 * @param OnlyMatchExactEvent If true, only listen for events that match the filter tags exactly. i.e "A.B" will only match "A.B" and not "A.B.C".
+	 * @param OnlyMatchExactDomain If true, only listen for events that match the domain tags exactly. i.e "A.B" will only match "A.B" and not "A.B.C".
 	 */
-	UFUNCTION(BlueprintCallable, Category = "SimpleEventSubsystem")
-	void ListenForEvent(UObject* Listener, FGameplayTagContainer EventFilter, FGameplayTagContainer DomainFilter, FSimpleEventDelegate EventReceivedDelegate);
+	UFUNCTION(BlueprintCallable, Category = "SimpleEventSubsystem", meta=(AdvancedDisplay=4))
+	void ListenForEvent(
+		UObject* Listener,
+		FGameplayTagContainer EventFilter,
+		FGameplayTagContainer DomainFilter,
+		FSimpleEventDelegate EventReceivedDelegate,
+		UScriptStruct* RequiredPayloadType,
+		bool OnlyMatchExactEvent = true,
+		bool OnlyMatchExactDomain = true);
 
 	/**
 	 * Stop listening for an event on a listener.

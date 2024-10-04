@@ -18,20 +18,57 @@ void USimpleEventSubsystem::SendEvent(FGameplayTag EventTag, FGameplayTag Domain
 			InvalidListenerIndexes.Add(i);
 			continue;
 		}
-
-		if (Subscription.EventTags.IsValid() && !Subscription.EventTags.HasTagExact(EventTag))
+		
+		if (Subscription.EventTags.IsValid())
 		{
-			continue;
+			if (Subscription.OnlyMatchExactEvent && !Subscription.EventTags.HasTagExact(EventTag))
+			{
+				continue;
+			}
+
+			if (!Subscription.OnlyMatchExactEvent && !Subscription.EventTags.HasTag(EventTag))
+			{
+				continue;
+			}
 		}
 
-		if (Subscription.DomainTags.IsValid() && !Subscription.DomainTags.HasTagExact(DomainTag))
+		if (Subscription.DomainTags.IsValid())
 		{
-			continue;
+			if (Subscription.OnlyMatchExactDomain && !Subscription.DomainTags.HasTagExact(DomainTag))
+			{
+				continue;
+			}
+
+			if (!Subscription.OnlyMatchExactDomain && !Subscription.DomainTags.HasTag(DomainTag))
+			{
+				continue;
+			}
 		}
 
-		bool wasCalled = Subscription.CallbackDelegate.ExecuteIfBound(EventTag, DomainTag, Payload);
+		if (Subscription.RequiredPayloadType)
+		{
+			if (!Payload.IsValid())
+			{
+				UE_LOG(
+					LogTemp, Warning,
+					TEXT("No payload passed for Listener %s but the listener is expecting %s"),
+					*Listener->GetName(), *Subscription.RequiredPayloadType->GetName());
+				continue;	
+			}
+			
+			if (Payload.GetScriptStruct() != Subscription.RequiredPayloadType)
+			{
+				UE_LOG(
+					LogTemp, Warning,
+					TEXT("Payload type %s does not match Listener expected type %s"),
+					*Payload.GetScriptStruct()->GetName(), *Subscription.RequiredPayloadType->GetName());
+				continue;
+			}
+		}
 
-		if (!wasCalled)
+		bool WasCalled = Subscription.CallbackDelegate.ExecuteIfBound(EventTag, DomainTag, Payload);
+
+		if (!WasCalled)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Failed to call delegate for Listener %s"), *Listener->GetName());
 		}
@@ -43,11 +80,19 @@ void USimpleEventSubsystem::SendEvent(FGameplayTag EventTag, FGameplayTag Domain
 	}
 }
 
-void USimpleEventSubsystem::ListenForEvent(UObject* Listener, FGameplayTagContainer EventFilter, FGameplayTagContainer DomainFilter, FSimpleEventDelegate EventReceivedDelegate)
+void USimpleEventSubsystem::ListenForEvent(UObject* Listener, FGameplayTagContainer EventFilter,
+	FGameplayTagContainer DomainFilter, FSimpleEventDelegate EventReceivedDelegate, UScriptStruct* RequiredPayloadType,
+	bool OnlyMatchExactEvent, bool OnlyMatchExactDomain)
 {
 	if (!Listener)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Null Listener passed to ListenForEvent. Aborting."));
+		UE_LOG(LogTemp, Warning, TEXT("Null Listener passed to ListenForEvent. Can't listen for event."));
+		return;
+	}
+
+	if (!EventReceivedDelegate.IsBound())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("No delegate bound to ListenForEvent. Can't listen for event."));
 		return;
 	}
 
@@ -55,7 +100,10 @@ void USimpleEventSubsystem::ListenForEvent(UObject* Listener, FGameplayTagContai
 	Subscription.ListenerObject = Listener;
 	Subscription.CallbackDelegate = EventReceivedDelegate;
 	Subscription.EventTags.AppendTags(EventFilter);
+	Subscription.OnlyMatchExactEvent = OnlyMatchExactEvent;
 	Subscription.DomainTags.AppendTags(DomainFilter);
+	Subscription.OnlyMatchExactDomain = OnlyMatchExactDomain;
+	Subscription.RequiredPayloadType = RequiredPayloadType;
 
 	Subscriptions.Add(Subscription);
 }
