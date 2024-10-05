@@ -11,9 +11,30 @@ Anything that has access to the GameInstance (e.g Widgets, Pawns, PlayerControll
 
   </br>
   
-  Events are identified using 2 [gameplay tags](https://www.tomlooman.com/unreal-engine-gameplaytags-data-driven-design/): </br>
+  Events are identified using two [gameplay tags](https://www.tomlooman.com/unreal-engine-gameplaytags-data-driven-design/): </br>
   - `EventTag` e.g `Events.UI.ButtonClicked`
   - `DomainTag` e.g `EventDomains.UI.PauseMenu`
+
+  </br>
+
+  <details>
+  <summary>Why use two tags instead of one?</summary>
+  
+  </br>
+    
+  Using a domain tag can help cut down on repetetive tag names. </br>
+  
+  For example, imagine we have a manager object that wants to know when any UI button gets clicked. </br>
+  
+  Using a `DomainTag` we can use the following to identify the events of interest </br>
+  EventTag = `UI.ButtonClicked` </br>
+  DomainTags = `[EventDomains.MainMenu, EventDomains.OptionsMenu, EventDomains.PauseMenu]` </br>
+  
+  Without a `DomainTag` we would need to listen for: </br>
+  EventTags = `[UI.MainMenu.ButtonClicked, UI.OptionsMenu.ButtonClicked, UI.PauseMenu.ButtonClicked]` </br>
+  
+  Without a `DomainTag` we have 3 "ButtonClicked" tags and this looks messy in my opinion as we start to add more tags during development. </br>
+  </details>
   
   </br>
   
@@ -30,11 +51,13 @@ Anything that has access to the GameInstance (e.g Widgets, Pawns, PlayerControll
   </br>
 
   You can listen for multiple events and domains at the same time. </br>
-  If you leave EventFilter or DomainFilter empty then the delegate will be triggered for all events/domains.
-
-  </br>
+  If you leave `EventFilter` or `DomainFilter` empty then the delegate will be triggered for all events/domains.
   
-  ![image](https://github.com/user-attachments/assets/a1e6ddf3-4448-45e1-b215-14bf9a1be7f5)
+  There are some additional arguments that are hidden by default in the `ListenForEvent` node: </br>
+  - `RequiredPayloadType`: The event won't trigger unless a payload exists and it is of this specific struct type. If left empty the event will accept any payload. Default behaviour is empty.
+  - `OnlyMatchExactEvent` & `OnlyMatchExactDomain`: if set to true, "A.B" will only match "A.B" and won't match "A.B.C" tags. By default they are set to only match tags exactly.
+    
+  ![image](https://github.com/user-attachments/assets/a1eb6709-05f9-457b-a056-68417795f040)
 </details>
 
 <details>
