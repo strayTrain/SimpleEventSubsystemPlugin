@@ -7,13 +7,19 @@ Anything that has access to the GameInstance (e.g Widgets, Pawns, PlayerControll
 ## API Summary
 
 <details>
-  <summary>Sending an event</summary>
-
+  <summary>Sending an event</summary>  
+  
+  ![image](https://github.com/user-attachments/assets/dcf46f05-8053-463f-b7f3-3d448137650b)
+  
   </br>
   
   Events are identified using two [gameplay tags](https://www.tomlooman.com/unreal-engine-gameplaytags-data-driven-design/): </br>
   - `EventTag` e.g `Events.UI.ButtonClicked`
-  - `DomainTag` e.g `EventDomains.UI.PauseMenu`
+  - `DomainTag` e.g `EventDomains.UI.PauseMenu`  
+  
+  Events also have optional parameters:  
+  - `Payload`: You can use any struct as a payload to provide extra context to the event by passing it through the `MakeInstancedStruct` node.  
+  - `Sender`: This is an Actor input used to identify who sent the event. Later, when listening for an event you can filter by senders.  
 
   </br>
 
@@ -26,26 +32,15 @@ Anything that has access to the GameInstance (e.g Widgets, Pawns, PlayerControll
   
   For example, imagine we have a manager object that wants to know when any UI button gets clicked. </br>
   
-  Using a `DomainTag` we can use the following to identify the events of interest </br>
-  EventTag = `UI.ButtonClicked` </br>
-  DomainTags = `[EventDomains.MainMenu, EventDomains.OptionsMenu, EventDomains.PauseMenu]` </br>
+  Using a `DomainTag` we can use the following to identify the events of interest  
+  EventTag = `UI.ButtonClicked`  
+  DomainTags = `[EventDomains.MainMenu, EventDomains.OptionsMenu, EventDomains.PauseMenu]` 
   
-  Without a `DomainTag` we would need to listen for: </br>
-  EventTags = `[UI.MainMenu.ButtonClicked, UI.OptionsMenu.ButtonClicked, UI.PauseMenu.ButtonClicked]` </br>
+  Without a `DomainTag` we would need to listen for:  
+  EventTags = `[UI.MainMenu.ButtonClicked, UI.OptionsMenu.ButtonClicked, UI.PauseMenu.ButtonClicked]`  
   
-  Without a `DomainTag` we have 3 "ButtonClicked" tags and this looks messy in my opinion as we start to add more tags during development. </br>
-  </details>
-  
-  </br>
-
-  `Payload`: You can use any struct as a payload to provide extra context to the event with the `MakeInstancedStruct` node. This input is optional.
-  `Sender`: This is an Actor input used to identify who sent the event. Later, when listening for an event you can filter by senders. This input is optional.
-  
-
-  </br>
-    
-  ![image](https://github.com/user-attachments/assets/dcf46f05-8053-463f-b7f3-3d448137650b)
-
+  Without a `DomainTag` we have 3 "ButtonClicked" tags and this looks messy in my opinion as we start to add more tags during development.  
+  </details>  
 </details>
 
 <details>
