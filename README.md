@@ -1,7 +1,7 @@
 # Simple Event Plugin
 
-**Simple Event Plugin** is a lightweight Unreal Engine plugin that provides a subsystem to send and listen for events. </br>
-Events can come with a payload that can be any UStruct you create in C++ or Blueprints (via [InstancedStruct](https://github.com/mattyman174/GenericItemization?tab=readme-ov-file#intro)). </br>
+**Simple Event Plugin** is a lightweight Unreal Engine plugin that provides a subsystem to send and listen for events.  
+Events can come with a payload that can be any UStruct you create in C++ or Blueprints (via [InstancedStruct](https://github.com/mattyman174/GenericItemization?tab=readme-ov-file#intro)).  
 Anything that has access to the GameInstance (e.g Widgets, Pawns, PlayerControllers) can listen for and send events.
 
 ## API Summary
