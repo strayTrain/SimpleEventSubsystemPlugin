@@ -2,7 +2,7 @@
 
 **Simple Event Plugin** is a lightweight Unreal Engine plugin that provides a subsystem to send and listen for events. </br>
 Events can come with a payload that can be any UStruct you create in C++ or Blueprints (via [InstancedStruct](https://github.com/mattyman174/GenericItemization?tab=readme-ov-file#intro)). </br>
-Anything that has access to the GameInstance (e.g Widgets, Pawns, PlayerControllers) can listen for/send events.
+Anything that has access to the GameInstance (e.g Widgets, Pawns, PlayerControllers) can listen for and send events.
 
 ## API Summary
 
@@ -22,7 +22,7 @@ Anything that has access to the GameInstance (e.g Widgets, Pawns, PlayerControll
   
   </br>
     
-  Using a domain tag can help cut down on repetetive tag names. </br>
+  Using a domain tag can help cut down on repetitive tag names. </br>
   
   For example, imagine we have a manager object that wants to know when any UI button gets clicked. </br>
   
@@ -37,12 +37,15 @@ Anything that has access to the GameInstance (e.g Widgets, Pawns, PlayerControll
   </details>
   
   </br>
+
+  `Payload`: You can use any struct as a payload to provide extra context to the event with the `MakeInstancedStruct` node. This input is optional.
+  `Sender`: This is an Actor input used to identify who sent the event. Later, when listening for an event you can filter by senders. This input is optional.
   
-  You can use any struct as a payload to provide extra context to the event with the `MakeInstancedStruct` node.
 
   </br>
     
-  ![image](https://github.com/user-attachments/assets/10307cca-f18b-47cc-9b99-f55f111e488a)
+  ![image](https://github.com/user-attachments/assets/dcf46f05-8053-463f-b7f3-3d448137650b)
+
 </details>
 
 <details>
@@ -52,12 +55,18 @@ Anything that has access to the GameInstance (e.g Widgets, Pawns, PlayerControll
 
   You can listen for multiple events and domains at the same time. </br>
   If you leave `EventFilter` or `DomainFilter` empty then the delegate will be triggered for all events/domains.
+
+  `OnlyTriggerOnce` will deregister the event listening actor after receving the event once.
   
   There are some additional arguments that are hidden by default in the `ListenForEvent` node: </br>
-  - `RequiredPayloadType`: The event won't trigger unless a payload exists and it is of this specific struct type. If left empty the event will accept any payload. Default behaviour is empty.
+  - `PayloadFilter`: The event won't trigger unless a payload exists and it is one of the specified struct types. If left empty the event will accept any payload. Default value is empty.
+  - `SenderFilter`: The event won't trigger unless it was sent by one of the specified actors. If left empty the event will accept events from any actor. Default behaviour is empty.
   - `OnlyMatchExactEvent` & `OnlyMatchExactDomain`: if set to true, "A.B" will only match "A.B" and won't match "A.B.C" tags. By default they are set to only match tags exactly.
+
+  The `ListenForEvent` node returns an ID representing the subscription which you can store and later reference to stop listening for this event.
     
-  ![image](https://github.com/user-attachments/assets/a1eb6709-05f9-457b-a056-68417795f040)
+  ![image](https://github.com/user-attachments/assets/9d5ca9b4-fe8d-4a3e-9eeb-dcb85babc3b9)
+
 </details>
 
 <details>
@@ -74,11 +83,22 @@ Anything that has access to the GameInstance (e.g Widgets, Pawns, PlayerControll
 </details>
 
 <details>
-  <summary>Stop listening for an event</summary>
+  <summary>Stop listening for an event</summary>  
+  
+  There are three ways to stop listening for events:   
 
-  </br>
     
-  ![image](https://github.com/user-attachments/assets/34f561ef-443b-4b6a-8899-bcd2f422903f)
+  `StopListeningForAllEvents`: Remove all event subscriptions from a specified actor.  
+    
+  `StopListeningForEventsByFilter`: Stop listening for a subset of events on a specified actor.  
+    
+  `StopListeningForEventSubscriptionByID`: Stops listening for a specific event subscription. The event subscription ID is obtained from the output of the `ListenForEvent` node.  
+  
+  </br>  
+  
+  ![image](https://github.com/user-attachments/assets/984b8db5-c0c3-4acb-8ca5-c3bcda7ae7c4)
+
+
 </details>
 
 <details>
@@ -101,7 +121,7 @@ Anything that has access to the GameInstance (e.g Widgets, Pawns, PlayerControll
 
 ## Installation Steps
 
-1. Download or clone the SimpleEventPlugin folder from this repo into your Unreal Engine project under your project's [Plugins folder](https://dev.epicgames.com/documentation/en-us/unreal-engine/plugins-in-unreal-engine#pluginfolders), create the Plugins folder if it doesn't exist. (e.g. If your project folder is `C:\Projects\SimpleEventTest` then place SimpleEventPlugin in  `C:\Projects\SimpleEventTest\Plugins`)
+1. Download or clone the SimpleEventPlugin folder from this repo into your Unreal Engine project under your project's [Plugins folder](https://dev.epicgames.com/documentation/en-us/unreal-engine/plugins-in-unreal-engine#pluginfolders), create the Plugins folder if it doesn't exist. (e.g. If your project folder is `C:\Projects\SimpleEventTest` then place the cloned `SimpleEventSubsystemPlugin` in  `C:\Projects\SimpleEventTest\Plugins`)
 2. Rebuild your project.
 3. Enable the plugin in your Unreal Engine project by navigating to **Edit > Plugins** and searching for "SimpleEventPlugin". (it should be enabled by default)
 
@@ -119,14 +139,14 @@ Anything that has access to the GameInstance (e.g Widgets, Pawns, PlayerControll
 
 void YourFunctionToSendEvent(UWorld* World)
 {
-    if (USimpleEventSubsystem* EventSubsystem = World->GetGameInstance()->GetSubsystem<USimpleEventSubsystem>())
-    {
-        FGameplayTag EventTag = FGameplayTag::RequestGameplayTag(TEXT("Game.PlayerDied"));
-        FGameplayTag DomainTag = FGameplayTag::RequestGameplayTag(TEXT("Domains.Game"));
-        FInstancedStruct Payload = FInstancedStruct::Make(FVector::UpVector);
-
-        EventSubsystem->SendEvent(EventTag, DomainTag, Payload);
-    }
+  if (USimpleEventSubsystem* EventSubsystem = World->GetGameInstance()->GetSubsystem<USimpleEventSubsystem>())
+  {
+    FGameplayTag EventTag = FGameplayTag::RequestGameplayTag(TEXT("Game.PlayerDied"));
+    FGameplayTag DomainTag = FGameplayTag::RequestGameplayTag(TEXT("Domains.Game"));
+    FInstancedStruct Payload = FInstancedStruct::Make(FVector::UpVector);
+    
+    EventSubsystem->SendEvent(EventTag, DomainTag, Payload, this);
+  }
 }
 ```
 
@@ -138,16 +158,25 @@ void YourFunctionToSendEvent(UWorld* World)
 
 void YourFunctionToListenForEvent(UObject* Listener, UWorld* World)
 {
-    if (USimpleEventSubsystem* EventSubsystem = World->GetGameInstance()->GetSubsystem<USimpleEventSubsystem>())
-    {
-        FGameplayTagContainer EventTags;
-        EventTags.AddTag(FGameplayTag::RequestGameplayTag(TEXT("Game.PlayerDied")));
-
-        FGameplayTagContainer DomainTags;
-        DomainTags.AddTag(FGameplayTag::RequestGameplayTag(TEXT("Domains.Game")));
-
-        EventSubsystem->ListenForEvent(Listener, EventTags, DomainTags, FSimpleEventDelegate::CreateUObject(Listener, &YourClass::YourCallbackFunction));
-    }
+  if (USimpleEventSubsystem* EventSubsystem = World->GetGameInstance()->GetSubsystem<USimpleEventSubsystem>())
+  {
+    FGameplayTagContainer EventTags;
+    EventTags.AddTag(FGameplayTag::RequestGameplayTag(TEXT("Game.PlayerDied")));
+    
+    FGameplayTagContainer DomainTags;
+    DomainTags.AddTag(FGameplayTag::RequestGameplayTag(TEXT("Domains.Game")));
+    
+    FSimpleEventDelegate EventDelegate;
+    EventDelegate.BindDynamic(this, &YourClass::YourCallbackFunction);
+    
+    TArray<UScriptStruct*> PayloadFilter;
+    // Note: StaticStruct is only available for structs defined with the USTRUCT() macro
+    PayloadFilter.Add(FYourCustomStruct::StaticStruct());
+    
+    TArray<AActor*> SenderFilter;
+    
+    EventSubsystem->ListenForEvent(Listener, false, EventTags, DomainTags, EventDelegate, PayloadFilter, SenderFilter);
+  }
 }
 
 void YourClass::YourCallbackFunction(FGameplayTag EventTag, FGameplayTag Domain, FInstancedStruct Payload)
@@ -167,21 +196,17 @@ void YourClass::YourCallbackFunction(FGameplayTag EventTag, FGameplayTag Domain,
 ```cpp
 #include "SimpleEventSubsystem.h"
 
-void YourFunctionToUnsubscribe(UObject* Listener, UWorld* World)
+void YourFunctionToUnsubscribe(UObject* Listener, UWorld* World, FGuid EventSubscriptionID)
 {
     if (USimpleEventSubsystem* EventSubsystem = World->GetGameInstance()->GetSubsystem<USimpleEventSubsystem>())
     {
-        // Unsubscribe a specific delegate
-        EventSubsystem->StopListeningForEventDelegate(Listener, FSimpleEventDelegate::CreateUObject(Listener, &YourClass::YourCallbackFunction));
-        
-        // Unsubscribe filtered by tags
-        FGameplayTagContainer EventTags;
-        EventTags.AddTag(FGameplayTag::RequestGameplayTag(TEXT("Game.PlayerDied")));
-
-        FGameplayTagContainer DomainTags;
-        DomainTags.AddTag(FGameplayTag::RequestGameplayTag(TEXT("Domains.Game")));
-
-        EventSubsystem->StopListeningForEventsFiltered(Listener, EventTags, DomainTags);
+      EventSubsystem->StopListeningForAllEvents(Listener);
+      EventSubsystem->StopListeningForEventSubscriptionByID(Listener, EventSubscriptionID);
+      
+      FGameplayTagContainer EventFilter;
+      FGameplayTagContainer DomainFilter;
+      
+      EventSubsystem->StopListeningForEventsByFilter(Listener, EventFilter, DomainFilter);
     }
 }
 ```
