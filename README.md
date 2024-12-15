@@ -4,6 +4,8 @@
 Events can come with a payload that can be any UStruct you create in C++ or Blueprints (via [InstancedStruct](https://github.com/mattyman174/GenericItemization?tab=readme-ov-file#intro)). </br>
 Anything that has access to the GameInstance (e.g Widgets, Pawns, PlayerControllers) can listen for and send events.
 
+![image](https://github.com/user-attachments/assets/3c7df820-e5e6-41e8-abd1-4c71d2d7c08a)
+
 ## API Summary
 
 <details>
