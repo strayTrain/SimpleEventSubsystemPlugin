@@ -102,6 +102,17 @@ Anything that has access to the GameInstance (e.g Widgets, Pawns, PlayerControll
 </details>
 
 <details>
+  <summary>Utility Nodes</summary>
+
+  </br>
+
+  `WaitForSimpleEvent`: This async node allows you to wait for an event and respond to it in the same place. 
+
+  ![image](https://github.com/user-attachments/assets/7666fe3d-6d7a-44a4-9dbc-0ffcf59d2a05)
+
+</details>
+
+<details>
   <summary>A note on replication </summary>
 
   </br>
