@@ -46,7 +46,7 @@ Anything that has access to the GameInstance (e.g Widgets, Pawns, PlayerControll
 <details>
   <summary>Listening for an event</summary>
 
-  </br>
+  ![image](https://github.com/user-attachments/assets/9d5ca9b4-fe8d-4a3e-9eeb-dcb85babc3b9)
 
   You can listen for multiple events and domains at the same time. </br>
   If you leave `EventFilter` or `DomainFilter` empty then the delegate will be triggered for all events/domains.
@@ -59,22 +59,17 @@ Anything that has access to the GameInstance (e.g Widgets, Pawns, PlayerControll
   - `OnlyMatchExactEvent` & `OnlyMatchExactDomain`: if set to true, "A.B" will only match "A.B" and won't match "A.B.C" tags. By default they are set to only match tags exactly.
 
   The `ListenForEvent` node returns an ID representing the subscription which you can store and later reference to stop listening for this event.
-    
-  ![image](https://github.com/user-attachments/assets/9d5ca9b4-fe8d-4a3e-9eeb-dcb85babc3b9)
-
 </details>
 
 <details>
   <summary>Receiving an event</summary>
 
+  ![image](https://github.com/user-attachments/assets/82c3bbdb-f08a-4939-9d06-6fcffed21657)
+
   </br>
 
   Use the `GetInstancedStructValue` node to cast to the type you expect. </br>
   The output is initially a wildcard and you break your expected struct to cast the output type. 
-
-  </br>
-  
-  ![image](https://github.com/user-attachments/assets/82c3bbdb-f08a-4939-9d06-6fcffed21657)
 </details>
 
 <details>
